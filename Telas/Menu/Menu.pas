@@ -76,6 +76,7 @@ type
     procedure ClBBlackClick(Sender: TObject);
     procedure DBGrid1CellClick(Column: TColumn);
     procedure edtNomeArqChange(Sender: TObject);
+    function testAPI():String;
 
   private
     { Private declarations }
@@ -98,9 +99,13 @@ uses Config, DMProtocol;
 //Pesquisa Switch Case
 
 //Erro ao cancelar diretorio
-//Problema com inserção da Data
-//Problema com atualização do icone dee Status
+//Problema com inserÃ§Ã£o da Data
+//Problema com atualizaÃ§Ã£o do icone dee Status
 
+function TframeMenu.testAPI():String;
+begin
+  Result := 'Test';
+end;
 
 procedure TframeMenu.Abrir2Click(Sender: TObject);
 begin
