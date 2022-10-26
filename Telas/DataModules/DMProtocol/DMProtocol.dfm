@@ -5,8 +5,8 @@ object DM: TDM
   object conexao: TADOConnection
     Connected = True
     ConnectionString = 
-      'Provider=MSDASQL.1;Persist Security Info=False;Data Source=pmdat' +
-      'a'
+      'Provider=MSDASQL.1;Persist Security Info=False;Data Source=Pasca' +
+      'lManager_Database'
     LoginPrompt = False
     Left = 24
     Top = 16
@@ -39,9 +39,6 @@ object DM: TDM
       FieldName = 'diretorio'
       Size = 255
     end
-    object queryarquivosdata: TDateField
-      FieldName = 'data'
-    end
     object queryarquivostipo: TStringField
       FieldName = 'tipo'
       Size = 8
@@ -58,6 +55,9 @@ object DM: TDM
     end
     object queryarquivosprazo: TDateField
       FieldName = 'prazo'
+    end
+    object queryarquivosdataCadastro: TDateField
+      FieldName = 'dataCadastro'
     end
     object queryarquivosresponsavel: TStringField
       FieldName = 'responsavel'

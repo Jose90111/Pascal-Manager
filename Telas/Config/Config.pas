@@ -33,7 +33,7 @@ var
 begin
 
   CorSelecionada := ColorBox1.Selected;
-  frameMenu.Color := CorSelecionada;
+  framePrincipal.Color := CorSelecionada;
   frameConfig.Color := CorSelecionada;
   //frameEntrada.Color := CorSelecionada;
   //FrameMod0.Color := CorSelecionada;

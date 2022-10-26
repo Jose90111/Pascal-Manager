@@ -10,7 +10,7 @@ uses
   Vcl.Mask, Vcl.WinXCalendars;
 
 type
-  TframeMenu = class(TForm)
+  TframePrincipal = class(TForm)
     MainMenu1: TMainMenu;
     Voltar1: TMenuItem;
     Configuraes1: TMenuItem;
@@ -52,10 +52,11 @@ type
     imgClip: TImage;
     edtTipoArq: TDBEdit;
     btnPesquisar: TButton;
-    Label1: TLabel;
+    lblDataCadastro: TLabel;
     ClBBlack: TImage;
     ClBWhite: TImage;
     Label2: TLabel;
+    edtDataCadastro: TDBEdit;
     procedure Voltar1Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Abrir2Click(Sender: TObject);
@@ -76,6 +77,8 @@ type
     procedure ClBBlackClick(Sender: TObject);
     procedure DBGrid1CellClick(Column: TColumn);
     procedure edtNomeArqChange(Sender: TObject);
+    procedure imgClipClick(Sender: TObject);
+    procedure rgPesquisaClick(Sender: TObject);
 
   private
     { Private declarations }
@@ -85,7 +88,7 @@ type
   end;
 
 var
-  frameMenu: TframeMenu;
+  framePrincipal: TframePrincipal;
   i : Integer;
 
 implementation
@@ -102,12 +105,12 @@ uses Config, DMProtocol;
 //Problema com atualização do icone dee Status
 
 
-procedure TframeMenu.Abrir2Click(Sender: TObject);
+procedure TframePrincipal.Abrir2Click(Sender: TObject);
 begin
   frameConfig.ShowModal;
 end;
 
-procedure TframeMenu.btnPesquisarClick(Sender: TObject);
+procedure TframePrincipal.btnPesquisarClick(Sender: TObject);
 begin
   DM.queryarquivos.Close;
   DM.queryarquivos.SQL.Clear;
@@ -125,7 +128,7 @@ begin
   DM.queryarquivos.Open;
 end;
 
-procedure TframeMenu.ClBBlackClick(Sender: TObject);
+procedure TframePrincipal.ClBBlackClick(Sender: TObject);
 begin
   ClPrazo.Visible := False;
   ClBBlack.Visible := False;
@@ -134,7 +137,7 @@ begin
   //ClPrazo.Date := Date();
 end;
 
-procedure TframeMenu.ClBWhiteClick(Sender: TObject);
+procedure TframePrincipal.ClBWhiteClick(Sender: TObject);
 begin
   ClPrazo.Visible := True;
   ClBWhite.Visible := False;
@@ -143,47 +146,59 @@ begin
   ClPrazo.Date := Date();
 end;
 
-procedure TframeMenu.ClPrazoChange(Sender: TObject);
+procedure TframePrincipal.ClPrazoChange(Sender: TObject);
 begin
 dbedtprazo.Text:=datetostr(ClPrazo.date);
 end;
 
-procedure TframeMenu.cbStatusChange(Sender: TObject);
+procedure TframePrincipal.cbStatusChange(Sender: TObject);
 begin
  CorStatus;
 end;
 
-procedure TframeMenu.cbStatusGesture(Sender: TObject;
+procedure TframePrincipal.cbStatusGesture(Sender: TObject;
   const EventInfo: TGestureEventInfo; var Handled: Boolean);
 begin
 CorStatus;
 end;
 
-procedure TframeMenu.cbStatusMouseEnter(Sender: TObject);
+procedure TframePrincipal.cbStatusMouseEnter(Sender: TObject);
 begin
 
 end;
 
 //Erro ao cancelar diretorio
-procedure TframeMenu.edtDiretorioClick(Sender: TObject);
+procedure TframePrincipal.edtDiretorioClick(Sender: TObject);
 begin
   opendialog1.Execute;
   edtdiretorio.Text:=opendialog1.FileName;
   edtTipoArq.Text := ExtractFileExt(edtdiretorio.Text);
 end;
 
-procedure TframeMenu.edtNomeArqChange(Sender: TObject);
+procedure TframePrincipal.edtNomeArqChange(Sender: TObject);
 begin
 CorStatus();
 end;
 
-procedure TframeMenu.FormClose(Sender: TObject; var Action: TCloseAction);
+procedure TframePrincipal.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   Application.Terminate;
 end;
 
+procedure TframePrincipal.imgClipClick(Sender: TObject);
+begin
+  opendialog1.Execute;
+  edtdiretorio.Text:=opendialog1.FileName;
+  edtTipoArq.Text := ExtractFileExt(edtdiretorio.Text);
+end;
+
+procedure TframePrincipal.rgPesquisaClick(Sender: TObject);
+begin
+
+end;
+
 //CorStatus()
-procedure TframeMenu.CorStatus;
+procedure TframePrincipal.CorStatus;
 begin
    //Em Andamento
   if cbStatus.ItemIndex=0 then
@@ -306,31 +321,31 @@ begin
   end;
 end;
 
-procedure TframeMenu.dbedtprazoClick(Sender: TObject);
+procedure TframePrincipal.dbedtprazoClick(Sender: TObject);
 begin
 ClPrazo.Visible := True;
 end;
 
-procedure TframeMenu.DBGrid1CellClick(Column: TColumn);
+procedure TframePrincipal.DBGrid1CellClick(Column: TColumn);
 begin
 CorStatus();
 end;
 
-procedure TframeMenu.DBGrid1ColumnMoved(Sender: TObject; FromIndex,
+procedure TframePrincipal.DBGrid1ColumnMoved(Sender: TObject; FromIndex,
   ToIndex: Integer);
 begin
  CorStatus;
 end;
 
-procedure TframeMenu.DBNavigator1Click(Sender: TObject;
+procedure TframePrincipal.DBNavigator1Click(Sender: TObject;
   Button: TNavigateBtn);
 begin
   CorStatus;
 end;
 
-procedure TframeMenu.Voltar1Click(Sender: TObject);
+procedure TframePrincipal.Voltar1Click(Sender: TObject);
 begin
-frameMenu.Destroy;
+framePrincipal.Destroy;
 end;
 
 end.

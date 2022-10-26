@@ -31,8 +31,8 @@ uses Menu;
 
 procedure TframeEntrada.Image1Click(Sender: TObject);
 begin
-  Application.CreateForm(TframeMenu, frameMenu);
-  frameMenu.Show;
+  Application.CreateForm(TframePrincipal, framePrincipal);
+  framePrincipal.Show;
 
 end;
 

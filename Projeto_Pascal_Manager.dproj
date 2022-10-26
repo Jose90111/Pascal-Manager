@@ -105,7 +105,7 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Telas\Menu\Menu.pas">
-            <Form>frameMenu</Form>
+            <Form>framePrincipal</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Telas\Config\Config.pas">

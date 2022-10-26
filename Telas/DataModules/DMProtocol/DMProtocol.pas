@@ -18,13 +18,13 @@ type
     queryarquivosid: TAutoIncField;
     queryarquivosnome: TStringField;
     queryarquivosdiretorio: TStringField;
-    queryarquivosdata: TDateField;
     queryarquivostipo: TStringField;
     queryarquivosstatus: TStringField;
     queryarquivoslocalf: TStringField;
     queryarquivoscomplemento: TStringField;
     queryarquivosprazo: TDateField;
     queryarquivosresponsavel: TStringField;
+    queryarquivosdataCadastro: TDateField;
   private
     { Private declarations }
   public
