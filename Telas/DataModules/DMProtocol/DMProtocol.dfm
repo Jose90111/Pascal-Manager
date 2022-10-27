@@ -1,7 +1,7 @@
 object DM: TDM
   OldCreateOrder = False
   Height = 72
-  Width = 216
+  Width = 210
   object conexao: TADOConnection
     Connected = True
     ConnectionString = 
@@ -15,6 +15,7 @@ object DM: TDM
     Active = True
     Connection = conexao
     CursorType = ctStatic
+    AfterScroll = queryarquivosAfterScroll
     Parameters = <
       item
         Name = 'pConsulta'

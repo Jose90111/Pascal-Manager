@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.Menus,
   Vcl.Imaging.pngimage,
   Data.DB, Vcl.StdCtrls, Vcl.DBCtrls, Vcl.Grids, Vcl.DBGrids,
-  Vcl.Mask, Vcl.WinXCalendars;
+  Vcl.Mask, Vcl.WinXCalendars, Vcl.Buttons;
 
 type
   TframePrincipal = class(TForm)
@@ -21,7 +21,6 @@ type
     cbStatus: TDBComboBox;
     dbedtprazo: TDBEdit;
     DBGrid1: TDBGrid;
-    DBNavigator1: TDBNavigator;
     edtDiretorio: TDBEdit;
     edtLocalF: TDBEdit;
     edtNomeArq: TDBEdit;
@@ -57,6 +56,14 @@ type
     ClBWhite: TImage;
     Label2: TLabel;
     edtDataCadastro: TDBEdit;
+    btnBack: TBitBtn;
+    btnNext: TBitBtn;
+    btnPlus: TBitBtn;
+    btnMinus: TBitBtn;
+    btnEdit: TBitBtn;
+    btnOk: TBitBtn;
+    btnCancel: TBitBtn;
+    btnRefresh: TBitBtn;
     procedure Voltar1Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Abrir2Click(Sender: TObject);
@@ -79,6 +86,14 @@ type
     procedure edtNomeArqChange(Sender: TObject);
     procedure imgClipClick(Sender: TObject);
     procedure rgPesquisaClick(Sender: TObject);
+    procedure btnBackClick(Sender: TObject);
+    procedure btnMinusClick(Sender: TObject);
+    procedure btnNextClick(Sender: TObject);
+    procedure btnRefreshClick(Sender: TObject);
+    procedure btnCancelClick(Sender: TObject);
+    procedure btnPlusClick(Sender: TObject);
+    procedure btnOkClick(Sender: TObject);
+    procedure btnEditClick(Sender: TObject);
 
   private
     { Private declarations }
@@ -97,17 +112,56 @@ implementation
 
 uses Config, DMProtocol;
 
-
-//Pesquisa Switch Case
-
-//Erro ao cancelar diretorio
-//Problema com inserção da Data
-//Problema com atualização do icone dee Status
-
-
 procedure TframePrincipal.Abrir2Click(Sender: TObject);
 begin
   frameConfig.ShowModal;
+end;
+
+procedure TframePrincipal.btnBackClick(Sender: TObject);
+begin
+ DM.queryarquivos.Prior;
+end;
+
+procedure TframePrincipal.btnCancelClick(Sender: TObject);
+begin
+  if Application.MessageBox('Você deseja CANCELAR esse cadastro?','Confirmação',MB_ICONWARNING+MB_YESNO)= mrYES then
+    begin
+      btnPlus.Enabled := true;
+      btnMinus.Enabled := true;
+      btnOk.Enabled := false;
+      btnCancel.Enabled := false;
+
+      DM.queryarquivos.Cancel;
+    end;
+end;
+
+
+procedure TframePrincipal.btnEditClick(Sender: TObject);
+begin
+  DM.queryarquivos.Edit;
+end;
+
+procedure TframePrincipal.btnMinusClick(Sender: TObject);
+begin
+if Application.MessageBox('Você deseja DELETAR esse cadastro?','Confirmação',MB_ICONWARNING+MB_YESNO)= mrYES then
+    begin
+      DM.queryarquivos.Delete;
+    end;
+end;
+
+procedure TframePrincipal.btnNextClick(Sender: TObject);
+begin
+  DM.queryarquivos.Next;
+end;
+
+procedure TframePrincipal.btnOkClick(Sender: TObject);
+begin
+  btnPlus.Enabled := true;
+  btnMinus.Enabled := true;
+  btnOk.Enabled := false;
+  btnCancel.Enabled := false;
+
+  DM.queryarquivos.Post;
 end;
 
 procedure TframePrincipal.btnPesquisarClick(Sender: TObject);
@@ -119,13 +173,29 @@ begin
   case rgPesquisa.ItemIndex of
   0:DM.queryarquivos.SQL.Add(' nome LIKE :pConsulta');
   1:DM.queryarquivos.SQL.Add(' status LIKE :pConsulta');
-  2:DM.queryarquivos.SQL.Add(' responsavel LIKE :pConsulta');
-  3:DM.queryarquivos.SQL.Add(' data LIKE :pConsulta');
-  4:DM.queryarquivos.SQL.Add(' localf LIKE :pConsulta');
+  2:DM.queryarquivos.SQL.Add(' dataCadastro LIKE :pConsulta');
+  3:DM.queryarquivos.SQL.Add(' responsavel LIKE :pConsulta');
+  4:DM.queryarquivos.SQL.Add(' prazo LIKE :pConsulta');
+  5:DM.queryarquivos.SQL.Add(' localF LIKE :pConsulta');
   end;
 
   DM.queryarquivos.Parameters.ParamByName('pConsulta').Value := edtPesquisa.Text+'%';
   DM.queryarquivos.Open;
+end;
+
+procedure TframePrincipal.btnPlusClick(Sender: TObject);
+begin
+  btnPlus.Enabled := false;
+  btnMinus.Enabled := false;
+  btnOk.Enabled := true;
+  btnCancel.Enabled := true;
+
+  DM.queryarquivos.Append;
+end;
+
+procedure TframePrincipal.btnRefreshClick(Sender: TObject);
+begin
+  DM.queryarquivos.Refresh;
 end;
 
 procedure TframePrincipal.ClBBlackClick(Sender: TObject);

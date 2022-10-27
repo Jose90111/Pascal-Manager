@@ -25,6 +25,7 @@ type
     queryarquivosprazo: TDateField;
     queryarquivosresponsavel: TStringField;
     queryarquivosdataCadastro: TDateField;
+    procedure queryarquivosAfterScroll(DataSet: TDataSet);
   private
     { Private declarations }
   public
@@ -41,5 +42,26 @@ implementation
 uses Menu;
 
 {$R *.dfm}
+
+procedure TDM.queryarquivosAfterScroll(DataSet: TDataSet);
+begin
+  if queryarquivos.EoF then
+    begin
+      Menu.framePrincipal.btnNext.Enabled := false ;
+    end
+  else
+    begin
+      Menu.framePrincipal.btnNext.Enabled := true ;
+    end;
+
+  if queryarquivos.BoF then
+    begin
+      Menu.framePrincipal.btnBack.Enabled := false ;
+    end
+  else
+    begin
+      Menu.framePrincipal.btnBack.Enabled := true ;
+    end;
+end;
 
 end.
