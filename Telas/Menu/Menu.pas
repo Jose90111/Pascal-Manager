@@ -7,7 +7,9 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.Menus,
   Vcl.Imaging.pngimage,
   Data.DB, Vcl.StdCtrls, Vcl.DBCtrls, Vcl.Grids, Vcl.DBGrids,
-  Vcl.Mask, Vcl.WinXCalendars, Vcl.Buttons;
+  Vcl.Mask, Vcl.WinXCalendars, Vcl.Buttons,
+
+  ShellAPI;
 
 type
   TframePrincipal = class(TForm)
@@ -54,7 +56,7 @@ type
     lblDataCadastro: TLabel;
     ClBBlack: TImage;
     ClBWhite: TImage;
-    Label2: TLabel;
+    lblStatus: TLabel;
     edtDataCadastro: TDBEdit;
     btnBack: TBitBtn;
     btnNext: TBitBtn;
@@ -64,6 +66,11 @@ type
     btnOk: TBitBtn;
     btnCancel: TBitBtn;
     btnRefresh: TBitBtn;
+    Label1: TLabel;
+    btnAbrirArquivo: TBitBtn;
+    btnAbrirLocaldoArquivo: TBitBtn;
+    lblCategoria: TLabel;
+    cbCategoria: TDBComboBox;
     procedure Voltar1Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Abrir2Click(Sender: TObject);
@@ -76,7 +83,6 @@ type
       ToIndex: Integer);
     procedure cbStatusGesture(Sender: TObject;
       const EventInfo: TGestureEventInfo; var Handled: Boolean);
-    procedure cbStatusMouseEnter(Sender: TObject);
     procedure DBNavigator1Click(Sender: TObject; Button: TNavigateBtn);
     procedure btnPesquisarClick(Sender: TObject);
     procedure dbedtprazoClick(Sender: TObject);
@@ -94,6 +100,9 @@ type
     procedure btnPlusClick(Sender: TObject);
     procedure btnOkClick(Sender: TObject);
     procedure btnEditClick(Sender: TObject);
+    procedure btnAbrirLocaldoArquivoClick(Sender: TObject);
+    procedure btnAbrirArquivoClick(Sender: TObject);
+    procedure cbCategoriaEnter(Sender: TObject);
 
   private
     { Private declarations }
@@ -117,6 +126,39 @@ begin
   frameConfig.ShowModal;
 end;
 
+procedure TframePrincipal.btnAbrirArquivoClick(Sender: TObject);
+var
+  diretorio:string;
+begin
+
+  diretorio := edtDiretorio.Text;
+
+  ShellExecute(0,
+    'open',
+    PChar('explorer.exe'),
+    PChar('/n, /insert, ' +diretorio),
+    nil,  // Se nao funcionar, precisa por o caminho do Windows no parâmetro Directory >> PChar('C:\WINDOWS\'),
+    SW_SHOWMAXIMIZED);
+end;
+
+procedure TframePrincipal.btnAbrirLocaldoArquivoClick(Sender: TObject);
+var
+  diretorio:string;
+begin
+
+  diretorio := edtDiretorio.Text;
+
+  ShellExecute(0,
+    'open',
+    PChar('explorer.exe'),
+    PChar('/n, /select, ' +diretorio),
+    nil,  // Se nao funcionar, precisa por o caminho do Windows no parâmetro Directory >> PChar('C:\WINDOWS\'),
+    SW_SHOWMAXIMIZED);
+
+  // /insert Abre o arquivo
+  // /select Abre o local do arquivo
+end;
+
 procedure TframePrincipal.btnBackClick(Sender: TObject);
 begin
  DM.queryarquivos.Prior;
@@ -135,9 +177,13 @@ begin
     end;
 end;
 
-
 procedure TframePrincipal.btnEditClick(Sender: TObject);
 begin
+  btnPlus.Enabled := false;
+  btnMinus.Enabled := false;
+  btnOk.Enabled := true;
+  btnCancel.Enabled := true;
+
   DM.queryarquivos.Edit;
 end;
 
@@ -185,12 +231,23 @@ end;
 
 procedure TframePrincipal.btnPlusClick(Sender: TObject);
 begin
+  //Muda botões
   btnPlus.Enabled := false;
   btnMinus.Enabled := false;
   btnOk.Enabled := true;
   btnCancel.Enabled := true;
 
+  //Comando SQL
   DM.queryarquivos.Append;
+
+
+  //Abre o explorador de arquivos
+  opendialog1.Execute;
+  edtdiretorio.Text:=opendialog1.FileName;
+  edtTipoArq.Text := ExtractFileExt(edtdiretorio.Text);
+
+  //Adiciona Data
+  edtdataCadastro.Text := DateToStr(Date());
 end;
 
 procedure TframePrincipal.btnRefreshClick(Sender: TObject);
@@ -221,6 +278,11 @@ begin
 dbedtprazo.Text:=datetostr(ClPrazo.date);
 end;
 
+procedure TframePrincipal.cbCategoriaEnter(Sender: TObject);
+begin
+  cbCategoria.Items.Add(cbCategoria.Text);
+end;
+
 procedure TframePrincipal.cbStatusChange(Sender: TObject);
 begin
  CorStatus;
@@ -232,12 +294,6 @@ begin
 CorStatus;
 end;
 
-procedure TframePrincipal.cbStatusMouseEnter(Sender: TObject);
-begin
-
-end;
-
-//Erro ao cancelar diretorio
 procedure TframePrincipal.edtDiretorioClick(Sender: TObject);
 begin
   opendialog1.Execute;
@@ -270,7 +326,7 @@ end;
 //CorStatus()
 procedure TframePrincipal.CorStatus;
 begin
-   //Em Andamento
+   //Aberto
   if cbStatus.ItemIndex=0 then
   begin
     Samarelo.Visible    :=false;
@@ -285,53 +341,8 @@ begin
     Svermelho.Visible   :=false;
   end;
 
-  //Processando
-  if cbStatus.ItemIndex=1 then
-  begin
-    Samarelo.Visible    :=false;
-    Sazul_claro.Visible :=false;
-    Sazul_escuro.Visible:=false;
-    Sbranco.Visible     :=false;
-    Slaranja.Visible    :=false;
-    Smagenta.Visible    :=true;
-    Spreto.Visible      :=false;
-    Srosa.Visible       :=false;
-    Sverde.Visible      :=false;
-    Svermelho.Visible   :=false;
-  end;
-
-  //Aberto
-  if cbStatus.ItemIndex=2 then
-  begin
-    Samarelo.Visible    :=false;
-    Sazul_claro.Visible :=false;
-    Sazul_escuro.Visible:=false;
-    Sbranco.Visible     :=false;
-    Slaranja.Visible    :=false;
-    Smagenta.Visible    :=false;
-    Spreto.Visible      :=false;
-    Srosa.Visible       :=false;
-    Sverde.Visible      :=true;
-    Svermelho.Visible   :=false;
-  end;
-
-  //Pausado
-  if cbStatus.ItemIndex=3 then
-  begin
-    Samarelo.Visible    :=true;
-    Sazul_claro.Visible :=false;
-    Sazul_escuro.Visible:=false;
-    Sbranco.Visible     :=false;
-    Slaranja.Visible    :=false;
-    Smagenta.Visible    :=false;
-    Spreto.Visible      :=false;
-    Srosa.Visible       :=false;
-    Sverde.Visible      :=false;
-    Svermelho.Visible   :=false;
-  end;
-
   //Cancelado
-  if cbStatus.ItemIndex=4 then
+  if cbStatus.ItemIndex=1 then
   begin
     Samarelo.Visible    :=false;
     Sazul_claro.Visible :=false;
@@ -346,6 +357,51 @@ begin
   end;
 
   //Concluido
+  if cbStatus.ItemIndex=2 then
+  begin
+    Samarelo.Visible    :=false;
+    Sazul_claro.Visible :=false;
+    Sazul_escuro.Visible:=false;
+    Sbranco.Visible     :=false;
+    Slaranja.Visible    :=false;
+    Smagenta.Visible    :=false;
+    Spreto.Visible      :=false;
+    Srosa.Visible       :=false;
+    Sverde.Visible      :=true;
+    Svermelho.Visible   :=false;
+  end;
+
+  //Em Andamento
+  if cbStatus.ItemIndex=3 then
+  begin
+    Samarelo.Visible    :=false;
+    Sazul_claro.Visible :=true;
+    Sazul_escuro.Visible:=false;
+    Sbranco.Visible     :=false;
+    Slaranja.Visible    :=false;
+    Smagenta.Visible    :=false;
+    Spreto.Visible      :=false;
+    Srosa.Visible       :=false;
+    Sverde.Visible      :=false;
+    Svermelho.Visible   :=false;
+  end;
+
+  //Ignorar
+  if cbStatus.ItemIndex=4 then
+  begin
+    Samarelo.Visible    :=false;
+    Sazul_claro.Visible :=false;
+    Sazul_escuro.Visible:=false;
+    Sbranco.Visible     :=false;
+    Slaranja.Visible    :=false;
+    Smagenta.Visible    :=false;
+    Spreto.Visible      :=false;
+    Srosa.Visible       :=true;
+    Sverde.Visible      :=false;
+    Svermelho.Visible   :=false;
+  end;
+
+  //Pausado
   if cbStatus.ItemIndex=5 then
   begin
     Samarelo.Visible    :=false;
@@ -360,17 +416,17 @@ begin
     Svermelho.Visible   :=false;
   end;
 
-  //Ignorar
+  //Processando
   if cbStatus.ItemIndex=6 then
   begin
     Samarelo.Visible    :=false;
     Sazul_claro.Visible :=false;
     Sazul_escuro.Visible:=false;
     Sbranco.Visible     :=false;
-    Slaranja.Visible    :=false;
+    Slaranja.Visible    :=true;
     Smagenta.Visible    :=false;
     Spreto.Visible      :=false;
-    Srosa.Visible       :=true;
+    Srosa.Visible       :=false;
     Sverde.Visible      :=false;
     Svermelho.Visible   :=false;
   end;

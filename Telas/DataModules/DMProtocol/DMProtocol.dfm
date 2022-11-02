@@ -16,6 +16,7 @@ object DM: TDM
     Connection = conexao
     CursorType = ctStatic
     AfterScroll = queryarquivosAfterScroll
+    AfterRefresh = queryarquivosAfterRefresh
     Parameters = <
       item
         Name = 'pConsulta'
@@ -57,12 +58,16 @@ object DM: TDM
     object queryarquivosprazo: TDateField
       FieldName = 'prazo'
     end
-    object queryarquivosdataCadastro: TDateField
-      FieldName = 'dataCadastro'
-    end
     object queryarquivosresponsavel: TStringField
       FieldName = 'responsavel'
       Size = 40
+    end
+    object queryarquivosdataCadastro: TStringField
+      FieldName = 'dataCadastro'
+    end
+    object queryarquivoscategoria: TStringField
+      FieldName = 'categoria'
+      Size = 30
     end
   end
   object dsarquivos: TDataSource
