@@ -25,7 +25,9 @@ type
     queryarquivosprazo: TDateField;
     queryarquivosresponsavel: TStringField;
     queryarquivosdataCadastro: TStringField;
-    queryarquivoscategoria: TStringField;
+    queryarquivosnome_1: TStringField;
+    dsCode: TDataSource;
+    code: TADOQuery;
     procedure queryarquivosAfterScroll(DataSet: TDataSet);
     procedure queryarquivosAfterRefresh(DataSet: TDataSet);
   private

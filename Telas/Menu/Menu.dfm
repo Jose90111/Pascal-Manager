@@ -52969,10 +52969,18 @@ object framePrincipal: TframePrincipal
     Top = 121
     Width = 198
     Height = 21
-    DataField = 'categoria'
+    DataField = 'nome_1'
     DataSource = DM.dsarquivos
     TabOrder = 20
-    OnEnter = cbCategoriaEnter
+    OnKeyPress = cbCategoriaKeyPress
+  end
+  object Button1: TButton
+    Left = 640
+    Top = 216
+    Width = 75
+    Height = 25
+    Caption = 'Button1'
+    TabOrder = 23
   end
   object MainMenu1: TMainMenu
     Left = 88

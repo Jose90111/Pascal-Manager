@@ -71,6 +71,7 @@ type
     btnAbrirLocaldoArquivo: TBitBtn;
     lblCategoria: TLabel;
     cbCategoria: TDBComboBox;
+    Button1: TButton;
     procedure Voltar1Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Abrir2Click(Sender: TObject);
@@ -102,7 +103,7 @@ type
     procedure btnEditClick(Sender: TObject);
     procedure btnAbrirLocaldoArquivoClick(Sender: TObject);
     procedure btnAbrirArquivoClick(Sender: TObject);
-    procedure cbCategoriaEnter(Sender: TObject);
+    procedure cbCategoriaKeyPress(Sender: TObject; var Key: Char);
 
   private
     { Private declarations }
@@ -278,9 +279,33 @@ begin
 dbedtprazo.Text:=datetostr(ClPrazo.date);
 end;
 
-procedure TframePrincipal.cbCategoriaEnter(Sender: TObject);
+procedure TframePrincipal.cbCategoriaKeyPress(Sender: TObject;
+  var Key: Char);
 begin
-  cbCategoria.Items.Add(cbCategoria.Text);
+  //cbCategoria.Items.Add(cbCategoria.Text);
+
+  if Key <> #$D then exit  ;
+
+  DM.code.Close;
+  DM.code.SQL.Clear;
+
+  DM.code.SQL.Add('select * from categoria where nome like :pCategoria' );
+  DM.code.Parameters.ParamByName('pCategoria').Value := cbCategoria.Text;
+  DM.code.Open;
+
+  if DM.code.Eof then
+  begin
+  DM.code.Close;
+  DM.code.SQL.Clear;
+
+  DM.code.SQL.Add('Insert into categoria (nome) values (:pCategoria)');
+  DM.code.Parameters.ParamByName('pCategoria').Value := cbCategoria.Text;
+  DM.code.Open;
+  end else
+  cbCategoria.Text := DM.code.Fields[1].AsString;
+
+
+
 end;
 
 procedure TframePrincipal.cbStatusChange(Sender: TObject);

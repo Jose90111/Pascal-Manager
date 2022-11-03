@@ -1,7 +1,7 @@
 object DM: TDM
   OldCreateOrder = False
-  Height = 72
-  Width = 210
+  Height = 78
+  Width = 377
   object conexao: TADOConnection
     Connected = True
     ConnectionString = 
@@ -17,16 +17,10 @@ object DM: TDM
     CursorType = ctStatic
     AfterScroll = queryarquivosAfterScroll
     AfterRefresh = queryarquivosAfterRefresh
-    Parameters = <
-      item
-        Name = 'pConsulta'
-        DataType = ftString
-        Direction = pdInputOutput
-        Size = 16
-        Value = ''
-      end>
+    Parameters = <>
     SQL.Strings = (
-      'select * from arquivos')
+      'select * from arquivos'
+      'inner join categoria on arquivos.categoria=categoria.id')
     Left = 88
     Top = 16
     object queryarquivosid: TAutoIncField
@@ -65,14 +59,35 @@ object DM: TDM
     object queryarquivosdataCadastro: TStringField
       FieldName = 'dataCadastro'
     end
-    object queryarquivoscategoria: TStringField
-      FieldName = 'categoria'
-      Size = 30
+    object queryarquivosnome_1: TStringField
+      FieldName = 'nome_1'
+      ReadOnly = True
+      Size = 40
     end
   end
   object dsarquivos: TDataSource
     DataSet = queryarquivos
     Left = 160
+    Top = 16
+  end
+  object dsCode: TDataSource
+    DataSet = code
+    Left = 328
+    Top = 16
+  end
+  object code: TADOQuery
+    Connection = conexao
+    CursorType = ctStatic
+    Parameters = <
+      item
+        Name = 'pCategoria'
+        DataType = ftString
+        Size = -1
+        Value = ''
+      end>
+    SQL.Strings = (
+      'select * from categoria')
+    Left = 280
     Top = 16
   end
 end
