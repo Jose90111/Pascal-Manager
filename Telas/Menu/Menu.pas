@@ -138,7 +138,7 @@ begin
     'open',
     PChar('explorer.exe'),
     PChar('/n, /insert, ' +diretorio),
-    nil,  // Se nao funcionar, precisa por o caminho do Windows no par‚metro Directory >> PChar('C:\WINDOWS\'),
+    nil,  // Se nao funcionar, precisa por o caminho do Windows no par√¢metro Directory >> PChar('C:\WINDOWS\'),
     SW_SHOWMAXIMIZED);
 end;
 
@@ -153,7 +153,7 @@ begin
     'open',
     PChar('explorer.exe'),
     PChar('/n, /select, ' +diretorio),
-    nil,  // Se nao funcionar, precisa por o caminho do Windows no par‚metro Directory >> PChar('C:\WINDOWS\'),
+    nil,  // Se nao funcionar, precisa por o caminho do Windows no par√¢metro Directory >> PChar('C:\WINDOWS\'),
     SW_SHOWMAXIMIZED);
 
   // /insert Abre o arquivo
@@ -167,7 +167,7 @@ end;
 
 procedure TframePrincipal.btnCancelClick(Sender: TObject);
 begin
-  if Application.MessageBox('VocÍ deseja CANCELAR esse cadastro?','ConfirmaÁ„o',MB_ICONWARNING+MB_YESNO)= mrYES then
+  if Application.MessageBox('Voc√™ deseja CANCELAR esse cadastro?','Confirma√ß√£o',MB_ICONWARNING+MB_YESNO)= mrYES then
     begin
       btnPlus.Enabled := true;
       btnMinus.Enabled := true;
@@ -190,7 +190,7 @@ end;
 
 procedure TframePrincipal.btnMinusClick(Sender: TObject);
 begin
-if Application.MessageBox('VocÍ deseja DELETAR esse cadastro?','ConfirmaÁ„o',MB_ICONWARNING+MB_YESNO)= mrYES then
+if Application.MessageBox('Voc√™ deseja DELETAR esse cadastro?','Confirma√ß√£o',MB_ICONWARNING+MB_YESNO)= mrYES then
     begin
       DM.queryarquivos.Delete;
     end;
@@ -232,7 +232,7 @@ end;
 
 procedure TframePrincipal.btnPlusClick(Sender: TObject);
 begin
-  //Muda botıes
+  //Muda bot√µes
   btnPlus.Enabled := false;
   btnMinus.Enabled := false;
   btnOk.Enabled := true;
@@ -281,30 +281,42 @@ end;
 
 procedure TframePrincipal.cbCategoriaKeyPress(Sender: TObject;
   var Key: Char);
+  var replace_cat: Boolean;
+  var id_cat: Integer;
 begin
   //cbCategoria.Items.Add(cbCategoria.Text);
 
-  if Key <> #$D then exit  ;
+  if Key <> #$D then exit  ;// Apenas ingressar se for apertada a tecla Enter
 
   DM.code.Close;
   DM.code.SQL.Clear;
 
-  DM.code.SQL.Add('select * from categoria where nome like :pCategoria' );
+  DM.code.SQL.Add('select id from categoria where nome like :pCategoria' );// Procurar por categoria com o mesmo nome
   DM.code.Parameters.ParamByName('pCategoria').Value := cbCategoria.Text;
   DM.code.Open;
 
   if DM.code.Eof then
-  begin
+  begin// Se encontrar n√£o encontrar categoria com o mesmo nome, confirmar se o usu√°rio deseja criar uma nova
+  NormalizeTopMosts;
+  replace_cat := MessageBox('Categoria n√£o encontrada',' Deseja criar uma nova categoria com este nome?',MB_YESNO) = 6;
+  RestoreTopMosts;
+  if not replace_cat then exit;// Encerrar se o usu√°rio n√£o quiser criar uma nova categoria
+
   DM.code.Close;
   DM.code.SQL.Clear;
 
-  DM.code.SQL.Add('Insert into categoria (nome) values (:pCategoria)');
+  DM.code.SQL.Add('INSERT INTO categoria (nome) VALUES (:pCategoria)');// Inserir nova categoria no banco de dados
+  DM.code.Parameters.ParamByName('pCategoria').Value := cbCategoria.Text;
+  if DM.code.ExecSQL <> 1 then begin raise Exception.Create('Erro ao inserir categoria!') exit end;
+  DM.code.Close;
+  DM.code.SQL.Clear;
+  DM.code.SQL.Add('SELECT id FROM categoria WHERE nome = :pCategoria');// Buscar ID da nova categoria inserida
   DM.code.Parameters.ParamByName('pCategoria').Value := cbCategoria.Text;
   DM.code.Open;
-  end else
-  cbCategoria.Text := DM.code.Fields[1].AsString;
-
-
+  end;
+  id_cat := DM.code.Fields[0].AsInteger;// Salvar o valor da categoria ap√≥s tratamento
+  
+  //TODO: Inserir o valor da vari√°vel "id_cat" no campo "categoria" do arquivo
 
 end;
 
