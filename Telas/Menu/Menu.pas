@@ -139,7 +139,7 @@ begin
     'open',
     PChar('explorer.exe'),
     PChar('/n, /insert, ' +diretorio),
-    nil,  // Se nao funcionar, precisa por o caminho do Windows no parâmetro Directory >> PChar('C:\WINDOWS\'),
+    nil,  // Se nao funcionar, precisa por o caminho do Windows no parÃ¢metro Directory >> PChar('C:\WINDOWS\'),
     SW_SHOWMAXIMIZED);
 end;
 
@@ -154,7 +154,7 @@ begin
     'open',
     PChar('explorer.exe'),
     PChar('/n, /select, ' +diretorio),
-    nil,  // Se nao funcionar, precisa por o caminho do Windows no parâmetro Directory >> PChar('C:\WINDOWS\'),
+    nil,  // Se nao funcionar, precisa por o caminho do Windows no parÃ¢metro Directory >> PChar('C:\WINDOWS\'),
     SW_SHOWMAXIMIZED);
 
   // /insert Abre o arquivo
@@ -168,7 +168,7 @@ end;
 
 procedure TframePrincipal.btnCancelClick(Sender: TObject);
 begin
-  if Application.MessageBox('Você deseja CANCELAR esse cadastro?','Confirmação',MB_ICONWARNING+MB_YESNO)= mrYES then
+  if Application.MessageBox('VocÃª deseja CANCELAR esse cadastro?','ConfirmaÃ§Ã£o',MB_ICONWARNING+MB_YESNO)= mrYES then
     begin
       btnPlus.Enabled := true;
       btnMinus.Enabled := true;
@@ -191,7 +191,7 @@ end;
 
 procedure TframePrincipal.btnMinusClick(Sender: TObject);
 begin
-if Application.MessageBox('Você deseja DELETAR esse cadastro?','Confirmação',MB_ICONWARNING+MB_YESNO)= mrYES then
+if Application.MessageBox('VocÃª deseja DELETAR esse cadastro?','ConfirmaÃ§Ã£o',MB_ICONWARNING+MB_YESNO)= mrYES then
     begin
       DM.queryarquivos.Delete;
       Application.MessageBox('Cadastro Deletado!','Confirmação');
@@ -224,7 +224,7 @@ end;
 
 procedure TframePrincipal.btnPlusClick(Sender: TObject);
 begin
-  //Muda botões
+  //Muda botÃµes
   btnPlus.Enabled := false;
   btnMinus.Enabled := false;
   btnOk.Enabled := true;
@@ -271,6 +271,7 @@ begin
 dbedtprazo.Text:=datetostr(ClPrazo.date);
 end;
 
+<<<<<<< HEAD
 
 
 procedure TframePrincipal.btnOkClick(Sender: TObject);
@@ -319,10 +320,21 @@ procedure TframePrincipal.cbCategoriaDropDown(Sender: TObject);
 
 begin
   DM.code.Parameters.ParamByName('pCategoria').Value := cbCategoria.Text;
+=======
+procedure TframePrincipal.cbCategoriaKeyPress(Sender: TObject;
+  var Key: Char);
+  var replace_cat: Boolean;
+  var id_cat: Integer;
+begin
+  //cbCategoria.Items.Add(cbCategoria.Text);
+
+  if Key <> #$D then exit  ;// Apenas ingressar se for apertada a tecla Enter
+>>>>>>> 51472d751e3875045c55fafb8acaaade898d5be9
 
   DM.code.Close;
   DM.code.SQL.Clear;
 
+<<<<<<< HEAD
   DM.code.SQL.Add('SELECT nome FROM categoria' );
   DM.code.Open;
 
@@ -359,11 +371,14 @@ begin
   DM.code.Close;
   DM.code.SQL.Clear;
 
+=======
+>>>>>>> 51472d751e3875045c55fafb8acaaade898d5be9
   DM.code.SQL.Add('select id from categoria where nome like :pCategoria' );// Procurar por categoria com o mesmo nome
   DM.code.Parameters.ParamByName('pCategoria').Value := cbCategoria.Text;
   DM.code.Open;
 
   if DM.code.Eof then
+<<<<<<< HEAD
     begin// Se encontrar não encontrar categoria com o mesmo nome, confirmar se o usuário deseja criar uma nova
 
       Application.NormalizeTopMosts;
@@ -375,6 +390,29 @@ begin
 
     DM.code.Close;
     DM.code.SQL.Clear;
+=======
+  begin// Se encontrar nÃ£o encontrar categoria com o mesmo nome, confirmar se o usuÃ¡rio deseja criar uma nova
+  NormalizeTopMosts;
+  replace_cat := MessageBox('Categoria nÃ£o encontrada',' Deseja criar uma nova categoria com este nome?',MB_YESNO) = 6;
+  RestoreTopMosts;
+  if not replace_cat then exit;// Encerrar se o usuÃ¡rio nÃ£o quiser criar uma nova categoria
+
+  DM.code.Close;
+  DM.code.SQL.Clear;
+
+  DM.code.SQL.Add('INSERT INTO categoria (nome) VALUES (:pCategoria)');// Inserir nova categoria no banco de dados
+  DM.code.Parameters.ParamByName('pCategoria').Value := cbCategoria.Text;
+  if DM.code.ExecSQL <> 1 then begin raise Exception.Create('Erro ao inserir categoria!') exit end;
+  DM.code.Close;
+  DM.code.SQL.Clear;
+  DM.code.SQL.Add('SELECT id FROM categoria WHERE nome = :pCategoria');// Buscar ID da nova categoria inserida
+  DM.code.Parameters.ParamByName('pCategoria').Value := cbCategoria.Text;
+  DM.code.Open;
+  end;
+  id_cat := DM.code.Fields[0].AsInteger;// Salvar o valor da categoria apÃ³s tratamento
+  
+  //TODO: Inserir o valor da variÃ¡vel "id_cat" no campo "categoria" do arquivo
+>>>>>>> 51472d751e3875045c55fafb8acaaade898d5be9
 
     DM.code.SQL.Add('INSERT INTO categoria (nome) VALUES (:pCategoria)');// Inserir nova categoria no banco de dados
     DM.code.Parameters.ParamByName('pCategoria').Value := cbCategoria.Text;
