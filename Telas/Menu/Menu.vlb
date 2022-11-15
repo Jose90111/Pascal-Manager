@@ -8,7 +8,7 @@ Coordinates=506,298,90,58
 Coordinates=157,366,48,58
 
 [DM.queryarquivos]
-Coordinates=10,10,119,278
+Coordinates=10,10,119,322
 
 [lblTipo]
 Coordinates=794,298,53,58
@@ -164,5 +164,27 @@ Coordinates=608,10,92,58
 Coordinates=497,806,49,36
 
 []
-Coordinates=581,366,122,58
+Coordinates=299,208,59,58
+
+[DM.dsCode]
+Coordinates=148,1,82,36
+
+[Label1]
+Coordinates=148,199,53,58
+
+[cbCategoria]
+Coordinates=349,566,84,36
+Visible=True
+
+[btnAbrirArquivo]
+Coordinates=349,489,104,58
+
+[lblCategoria]
+Coordinates=148,122,84,58
+
+[btnAbrirLocaldoArquivo]
+Coordinates=466,87,149,58
+
+[DM.code]
+Coordinates=299,87,66,102
 

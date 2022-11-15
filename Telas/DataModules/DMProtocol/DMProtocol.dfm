@@ -61,8 +61,10 @@ object DM: TDM
     end
     object queryarquivosnome_1: TStringField
       FieldName = 'nome_1'
-      ReadOnly = True
       Size = 40
+    end
+    object queryarquivoscategoria: TIntegerField
+      FieldName = 'categoria'
     end
   end
   object dsarquivos: TDataSource
@@ -76,6 +78,7 @@ object DM: TDM
     Top = 16
   end
   object code: TADOQuery
+    Active = True
     Connection = conexao
     CursorType = ctStatic
     Parameters = <
@@ -89,5 +92,9 @@ object DM: TDM
       'select * from categoria')
     Left = 280
     Top = 16
+    object codenome: TStringField
+      FieldName = 'nome'
+      Size = 40
+    end
   end
 end

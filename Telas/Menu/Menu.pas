@@ -71,7 +71,6 @@ type
     btnAbrirLocaldoArquivo: TBitBtn;
     lblCategoria: TLabel;
     cbCategoria: TDBComboBox;
-    Button1: TButton;
     procedure Voltar1Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Abrir2Click(Sender: TObject);
@@ -103,7 +102,9 @@ type
     procedure btnEditClick(Sender: TObject);
     procedure btnAbrirLocaldoArquivoClick(Sender: TObject);
     procedure btnAbrirArquivoClick(Sender: TObject);
+    procedure cbCategoriaDropDown(Sender: TObject);
     procedure cbCategoriaKeyPress(Sender: TObject; var Key: Char);
+
 
   private
     { Private declarations }
@@ -193,22 +194,13 @@ begin
 if Application.MessageBox('Você deseja DELETAR esse cadastro?','Confirmação',MB_ICONWARNING+MB_YESNO)= mrYES then
     begin
       DM.queryarquivos.Delete;
+      Application.MessageBox('Cadastro Deletado!','Confirmação');
     end;
 end;
 
 procedure TframePrincipal.btnNextClick(Sender: TObject);
 begin
   DM.queryarquivos.Next;
-end;
-
-procedure TframePrincipal.btnOkClick(Sender: TObject);
-begin
-  btnPlus.Enabled := true;
-  btnMinus.Enabled := true;
-  btnOk.Enabled := false;
-  btnCancel.Enabled := false;
-
-  DM.queryarquivos.Post;
 end;
 
 procedure TframePrincipal.btnPesquisarClick(Sender: TObject);
@@ -279,34 +271,127 @@ begin
 dbedtprazo.Text:=datetostr(ClPrazo.date);
 end;
 
-procedure TframePrincipal.cbCategoriaKeyPress(Sender: TObject;
-  var Key: Char);
-begin
-  //cbCategoria.Items.Add(cbCategoria.Text);
 
-  if Key <> #$D then exit  ;
+
+procedure TframePrincipal.btnOkClick(Sender: TObject);
+begin
+  btnPlus.Enabled   := true;
+  btnMinus.Enabled  := true;
+  btnOk.Enabled     := false;
+  btnCancel.Enabled := false;
+
+
+  if cbCategoria.Text='' then
+    showmessage('Informe uma categoria ou digite uma nova para cadatrar.')
+  else
+    begin
+      var pesquisa :  string;
+          pesquisa := cbCategoria.Text;
+
+      DM.code.Close;
+      DM.code.SQL.Clear;
+      DM.code.Parameters.ParamByName('pCategoria').Value := cbCategoria.Text;
+
+
+      DM.code.SQL.Add('select * from categoria where nome like :pCategoria' );
+      DM.code.Parameters.ParamByName('pCategoria').Value := pesquisa;
+      DM.code.Open;
+
+    if DM.code.RecordCount=0 then
+      begin
+      DM.code.Close;
+      DM.code.SQL.Clear;
+
+      DM.code.SQL.Add('Insert into categoria (nome) values (:pCategoria)');
+      DM.code.Parameters.ParamByName('pCategoria').Value := pesquisa;
+      DM.code.ExecSQL;
+      showmessage('Categoria cadastrada com sucesso!');
+      end;
+    end;
+end;
+
+
+
+
+//Categoria DropDown
+procedure TframePrincipal.cbCategoriaDropDown(Sender: TObject);
+
+
+begin
+  DM.code.Parameters.ParamByName('pCategoria').Value := cbCategoria.Text;
 
   DM.code.Close;
   DM.code.SQL.Clear;
 
-  DM.code.SQL.Add('select * from categoria where nome like :pCategoria' );
+  DM.code.SQL.Add('SELECT nome FROM categoria' );
+  DM.code.Open;
+
+  if DM.code.RecordCount=0 then showmessage('Não existem itens cadastrados!');
+
+  DM.code.First;
+  cbCategoria.Items.Clear();
+  var
+    cont:integer;
+    cont:=1;
+
+  while cont<=Dm.code.RecordCount do
+    begin
+
+      if DM.code.FieldByName('nome').AsString <> '' then cbCategoria.Items.Add(DM.code.FieldByName('nome').AsString);
+
+      DM.code.next;
+      cont:=cont+1;
+    end;
+end;
+
+
+procedure TframePrincipal.cbCategoriaKeyPress(Sender: TObject;
+  var Key: Char);
+  var replace_cat: Boolean;
+  var id_cat: Integer;
+begin
+  //cbCategoria.Items.Add(cbCategoria.Text);
+
+  if Key <> #$D then exit  ;// Apenas ingressar se for apertada a tecla Enter
+
+  DM.code.Parameters.ParamByName('pCategoria').Value := cbCategoria.Text;
+
+  DM.code.Close;
+  DM.code.SQL.Clear;
+
+  DM.code.SQL.Add('select id from categoria where nome like :pCategoria' );// Procurar por categoria com o mesmo nome
   DM.code.Parameters.ParamByName('pCategoria').Value := cbCategoria.Text;
   DM.code.Open;
 
   if DM.code.Eof then
-  begin
-  DM.code.Close;
-  DM.code.SQL.Clear;
+    begin// Se encontrar não encontrar categoria com o mesmo nome, confirmar se o usuário deseja criar uma nova
 
-  DM.code.SQL.Add('Insert into categoria (nome) values (:pCategoria)');
-  DM.code.Parameters.ParamByName('pCategoria').Value := cbCategoria.Text;
-  DM.code.Open;
-  end else
-  cbCategoria.Text := DM.code.Fields[1].AsString;
+      Application.NormalizeTopMosts;
+      replace_cat := Application.MessageBox('Categoria não encontrada',' Deseja criar uma nova categoria com este nome?',MB_YESNO) = 6;
+      Application.RestoreTopMosts;
+
+    if not replace_cat then exit;// Encerrar se o usuário não quiser criar uma nova categoria
 
 
+    DM.code.Close;
+    DM.code.SQL.Clear;
 
-end;
+    DM.code.SQL.Add('INSERT INTO categoria (nome) VALUES (:pCategoria)');// Inserir nova categoria no banco de dados
+    DM.code.Parameters.ParamByName('pCategoria').Value := cbCategoria.Text;
+
+    if DM.code.ExecSQL <> 1 then begin raise Exception.Create('Erro ao inserir categoria!'); exit end;
+
+    DM.code.Close;
+    DM.code.SQL.Clear;
+    DM.code.SQL.Add('SELECT id FROM categoria WHERE nome = :pCategoria');// Buscar ID da nova categoria inserida
+    DM.code.Parameters.ParamByName('pCategoria').Value := cbCategoria.Text;
+    DM.code.Open;
+    end;
+
+    id_cat := DM.code.Fields[0].AsInteger;
+
+
+    end;
 
 procedure TframePrincipal.cbStatusChange(Sender: TObject);
 begin

@@ -51663,9 +51663,8 @@ object framePrincipal: TframePrincipal
     Anchors = [akLeft, akTop, akRight, akBottom]
     DataSource = DM.dsarquivos
     DragCursor = crHandPoint
-    DragMode = dmAutomatic
     DrawingStyle = gdsGradient
-    Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect, dgTitleClick, dgTitleHotTrack]
     ParentShowHint = False
     ShowHint = True
     TabOrder = 17
@@ -51674,6 +51673,8 @@ object framePrincipal: TframePrincipal
     TitleFont.Height = -11
     TitleFont.Name = 'Tahoma'
     TitleFont.Style = [fsBold]
+    Touch.ParentTabletOptions = False
+    Touch.TabletOptions = [toPressAndHold, toTouchSwitch, toSmoothScrolling]
     OnCellClick = DBGrid1CellClick
     OnColumnMoved = DBGrid1ColumnMoved
     Columns = <
@@ -51681,7 +51682,7 @@ object framePrincipal: TframePrincipal
         Expanded = False
         FieldName = 'nome'
         Title.Caption = 'Nome:'
-        Width = 399
+        Width = 349
         Visible = True
       end
       item
@@ -51694,13 +51695,14 @@ object framePrincipal: TframePrincipal
         Expanded = False
         FieldName = 'responsavel'
         Title.Caption = 'Responsavel'
-        Width = 226
+        Width = 209
         Visible = True
       end
       item
         Expanded = False
-        FieldName = 'categoria'
+        FieldName = 'nome_1'
         Title.Caption = 'Categoria'
+        Width = 124
         Visible = True
       end
       item
@@ -51751,7 +51753,7 @@ object framePrincipal: TframePrincipal
     Font.Style = [fsBold]
     ParentFont = False
     ReadOnly = True
-    TabOrder = 21
+    TabOrder = 20
     OnClick = edtDiretorioClick
   end
   object edtLocalF: TDBEdit
@@ -52138,7 +52140,7 @@ object framePrincipal: TframePrincipal
     DataField = 'tipo'
     DataSource = DM.dsarquivos
     ReadOnly = True
-    TabOrder = 22
+    TabOrder = 21
   end
   object edtDataCadastro: TDBEdit
     Left = 1012
@@ -52967,20 +52969,13 @@ object framePrincipal: TframePrincipal
   object cbCategoria: TDBComboBox
     Left = 683
     Top = 121
-    Width = 198
+    Width = 145
     Height = 21
     DataField = 'nome_1'
     DataSource = DM.dsarquivos
-    TabOrder = 20
+    TabOrder = 22
+    OnDropDown = cbCategoriaDropDown
     OnKeyPress = cbCategoriaKeyPress
-  end
-  object Button1: TButton
-    Left = 640
-    Top = 216
-    Width = 75
-    Height = 25
-    Caption = 'Button1'
-    TabOrder = 23
   end
   object MainMenu1: TMainMenu
     Left = 88
