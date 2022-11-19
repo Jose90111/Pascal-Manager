@@ -51700,7 +51700,7 @@ object framePrincipal: TframePrincipal
       end
       item
         Expanded = False
-        FieldName = 'nome_1'
+        FieldName = 'categoria'
         Title.Caption = 'Categoria'
         Width = 124
         Visible = True
@@ -52971,14 +52971,15 @@ object framePrincipal: TframePrincipal
     Top = 121
     Width = 145
     Height = 21
-    DataField = 'nome_1'
+    DataField = 'categoria'
     DataSource = DM.dsarquivos
     TabOrder = 22
     OnDropDown = cbCategoriaDropDown
     OnKeyPress = cbCategoriaKeyPress
   end
   object MainMenu1: TMainMenu
-    Left = 88
+    Left = 16
+    Top = 65528
     object Configuraes1: TMenuItem
       Caption = 'Configura'#231#245'es'
       object Abrir2: TMenuItem
@@ -52996,10 +52997,11 @@ object framePrincipal: TframePrincipal
     FileName = 'C:\Users\USER\Desktop\Pascal Manager'
     FileTypes = <>
     Options = []
-    Left = 16
+    Left = 112
+    Top = 536
   end
   object OpenDialog1: TOpenDialog
-    Left = 16
-    Top = 45
+    Left = 40
+    Top = 533
   end
 end

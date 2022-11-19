@@ -12,7 +12,6 @@ object DM: TDM
     Top = 16
   end
   object queryarquivos: TADOQuery
-    Active = True
     Connection = conexao
     CursorType = ctStatic
     AfterScroll = queryarquivosAfterScroll
@@ -59,10 +58,6 @@ object DM: TDM
     object queryarquivosdataCadastro: TStringField
       FieldName = 'dataCadastro'
     end
-    object queryarquivosnome_1: TStringField
-      FieldName = 'nome_1'
-      Size = 40
-    end
     object queryarquivoscategoria: TIntegerField
       FieldName = 'categoria'
     end
@@ -81,12 +76,17 @@ object DM: TDM
     Active = True
     Connection = conexao
     CursorType = ctStatic
+    DataSource = dsarquivos
     Parameters = <
       item
         Name = 'pCategoria'
         DataType = ftString
         Size = -1
         Value = ''
+      end
+      item
+        Name = 'teste'
+        Value = Null
       end>
     SQL.Strings = (
       'select * from categoria')

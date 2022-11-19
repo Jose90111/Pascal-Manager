@@ -25,7 +25,6 @@ type
     queryarquivosprazo: TDateField;
     queryarquivosresponsavel: TStringField;
     queryarquivosdataCadastro: TStringField;
-    queryarquivosnome_1: TStringField;
     dsCode: TDataSource;
     code: TADOQuery;
     queryarquivoscategoria: TIntegerField;

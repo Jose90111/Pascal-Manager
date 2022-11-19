@@ -319,7 +319,7 @@ procedure TframePrincipal.cbCategoriaDropDown(Sender: TObject);
 
 
 begin
-  DM.code.Parameters.ParamByName('pCategoria').Value := cbCategoria.Text;
+  DM.code.Parameters.ParamByName('teste').Value := cbCategoria.Text;
 
   DM.code.Close;
   DM.code.SQL.Clear;
