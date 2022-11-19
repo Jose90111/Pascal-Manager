@@ -51700,7 +51700,7 @@ object framePrincipal: TframePrincipal
       end
       item
         Expanded = False
-        FieldName = 'categoria'
+        FieldName = 'nome_1'
         Title.Caption = 'Categoria'
         Width = 124
         Visible = True
@@ -51722,6 +51722,7 @@ object framePrincipal: TframePrincipal
         Expanded = False
         FieldName = 'dataCadastro'
         Title.Caption = 'Data de Cadastro'
+        Width = 123
         Visible = True
       end
       item
@@ -52971,7 +52972,7 @@ object framePrincipal: TframePrincipal
     Top = 121
     Width = 145
     Height = 21
-    DataField = 'categoria'
+    DataField = 'nome_1'
     DataSource = DM.dsarquivos
     TabOrder = 22
     OnDropDown = cbCategoriaDropDown

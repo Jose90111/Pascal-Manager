@@ -29,6 +29,7 @@ type
     code: TADOQuery;
     queryarquivoscategoria: TIntegerField;
     codenome: TStringField;
+    queryarquivosnome_1: TStringField;
     procedure queryarquivosAfterScroll(DataSet: TDataSet);
     procedure queryarquivosAfterRefresh(DataSet: TDataSet);
   private

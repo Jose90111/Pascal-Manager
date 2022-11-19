@@ -245,6 +245,7 @@ end;
 
 procedure TframePrincipal.btnRefreshClick(Sender: TObject);
 begin
+  DM.queryarquivos.Open;
   DM.queryarquivos.Refresh;
 end;
 
@@ -319,7 +320,7 @@ procedure TframePrincipal.cbCategoriaDropDown(Sender: TObject);
 
 
 begin
-  DM.code.Parameters.ParamByName('teste').Value := cbCategoria.Text;
+  DM.code.Parameters.ParamByName('pCategoria').Value := cbCategoria.Text;
 
   DM.code.Close;
   DM.code.SQL.Clear;
@@ -343,6 +344,8 @@ begin
       DM.code.next;
       cont:=cont+1;
     end;
+
+  DM.code.Open;
 end;
 
 
