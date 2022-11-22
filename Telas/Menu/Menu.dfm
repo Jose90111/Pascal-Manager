@@ -51709,6 +51709,7 @@ object framePrincipal: TframePrincipal
         Expanded = False
         FieldName = 'localf'
         Title.Caption = 'Local F'#237'sico'
+        Width = 64
         Visible = True
       end
       item
@@ -52972,8 +52973,8 @@ object framePrincipal: TframePrincipal
     Top = 121
     Width = 145
     Height = 21
-    DataField = 'nome_1'
-    DataSource = DM.dsarquivos
+    DataField = 'nome'
+    DataSource = DM.dsCode
     TabOrder = 22
     OnDropDown = cbCategoriaDropDown
     OnKeyPress = cbCategoriaKeyPress

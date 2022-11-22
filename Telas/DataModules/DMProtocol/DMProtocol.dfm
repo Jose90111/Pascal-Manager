@@ -70,7 +70,6 @@ object DM: TDM
     end
     object queryarquivosnome_1: TStringField
       FieldName = 'nome_1'
-      LookupDataSet = code
       ReadOnly = True
       Size = 40
     end
