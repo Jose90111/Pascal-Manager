@@ -218,11 +218,11 @@ begin
   5:DM.queryarquivos.SQL.Add(' localF LIKE :pConsulta');
   end;
 
-  DM.queryarquivos.Parameters.ParamByName('pConsulta').Value := edtPesquisa.Text+'%';
-  DM.queryarquivos.Open;
-end;
-
-procedure TframePrincipal.btnPlusClick(Sender: TObject);
+  DM.queryarquivos.Parameters.ParamByName('pConsulta').Value := edtPesquisa.Text+'%';     // % é para tudo que for escrito depois não ter importancia
+  DM.queryarquivos.Open;                                                                   // Exemplo Jose_
+end;                                                                                        //             Augusto
+                                                                                             //            Afonso
+procedure TframePrincipal.btnPlusClick(Sender: TObject);                                      //           Ramazotto <3 ok?
 begin
   //Muda botões
   btnPlus.Enabled := false;
