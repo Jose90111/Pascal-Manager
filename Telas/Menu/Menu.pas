@@ -320,7 +320,9 @@ procedure TframePrincipal.cbCategoriaDropDown(Sender: TObject);
 
 
 begin
-  DM.code.Parameters.ParamByName('pCategoria').Value := cbCategoria.Text;
+  if DM.code.Parameters.ParamByName('pCategoria').Value <> null then DM.code.Parameters.ParamByName('pCategoria').Value := cbCategoria.Text
+    else exit;
+
 
   DM.code.Close;
   DM.code.SQL.Clear;
@@ -338,27 +340,31 @@ begin
 
   while cont<=Dm.code.RecordCount do
     begin
-
       if DM.code.FieldByName('nome').AsString <> '' then cbCategoria.Items.Add(DM.code.FieldByName('nome').AsString);
 
       DM.code.next;
       cont:=cont+1;
     end;
 
+
   DM.code.Open;
+
 end;
 
 
-procedure TframePrincipal.cbCategoriaKeyPress(Sender: TObject;
-  var Key: Char);
+procedure TframePrincipal.cbCategoriaKeyPress(Sender: TObject; var Key: Char);
   var replace_cat: Boolean;
   var id_cat: Integer;
+
 begin
-  //cbCategoria.Items.Add(cbCategoria.Text);
 
   if Key <> #$D then exit  ;// Apenas ingressar se for apertada a tecla Enter
 
-  DM.code.Parameters.ParamByName('pCategoria').Value := cbCategoria.Text;
+  if DM.code.Parameters.ParamByName('pCategoria').Value <> null then
+    Begin
+      DM.code.Parameters.ParamByName('pCategoria').Value := cbCategoria.Text
+    End
+  else exit;
 
   DM.code.Close;
   DM.code.SQL.Clear;

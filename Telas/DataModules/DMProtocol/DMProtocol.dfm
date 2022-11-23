@@ -12,6 +12,7 @@ object DM: TDM
     Top = 16
   end
   object queryarquivos: TADOQuery
+    Active = True
     Connection = conexao
     CursorType = ctStatic
     AfterScroll = queryarquivosAfterScroll
@@ -19,9 +20,8 @@ object DM: TDM
     Parameters = <
       item
         Name = 'pConsulta'
-        DataType = ftString
-        Direction = pdInputOutput
-        Size = -1
+        DataType = ftWideString
+        Size = 50
         Value = ''
       end>
     SQL.Strings = (
@@ -85,17 +85,16 @@ object DM: TDM
     Top = 16
   end
   object code: TADOQuery
+    Active = True
     Connection = conexao
     CursorType = ctStatic
     DataSource = dsarquivos
     Parameters = <
       item
         Name = 'pCategoria'
-        Attributes = [paNullable]
         DataType = ftString
-        Direction = pdOutput
-        Size = -1
-        Value = ''
+        Size = 16
+        Value = '0'
       end>
     SQL.Strings = (
       'select * from categoria')
